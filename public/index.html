@@ -1,0 +1,120 @@
+
+
+
+<!DOCTYPE html>
+    <head>
+        <html lang="en-US">
+        <meta charset = "utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/css/styles.css">
+        <!--IMPORT ANGULAR-->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+        
+        <title>Address Book</title>
+
+        
+    </head>
+    <script>
+    
+    var addressApp = angular.module('addressApp', [])
+    addressApp.controller('BookController', function($scope, $http){
+
+        $http.get('/api/addresses')
+            .then(function successCallback(response) {
+                console.log(response)
+                $scope.addresses = response.data;
+            }, function errorCallback(response) {
+            console.log('Error: ' + response.data);
+        });
+
+        $scope.hideform = true;
+        // reset form
+
+
+
+            $scope.getAddress = function(item){
+                if (!item) {
+                    $scope.addAddress = true;
+                    $scope.add_edit = "Add New: ";
+                    console.log("undefined", undefined)
+                } else {
+                    $scope.add = false;
+                    $scope.hideform = (item == $scope.address) ? !$scope.hideform : false; 
+                    console.log("get", item)
+                    return $scope.xaddress = item;
+                }
+            };
+
+            $scope.addAdress = function() { 
+                $scope.add = true;
+                $scope.hideform = false; 
+                $scope.address = {};
+              };
+            $scope.saveLead = function() { 
+                $http.post('/api/add', $scope.lead)
+                .then(function successCallback(response) {
+                    $scope.post_result = response.data.result;
+                }, function errorCallback(response) {
+                  console.log('Error: ' + response.data);
+                });
+              };
+                
+        });
+        </script>
+            <body ng-app="addressApp">
+                <div data-dojo-type="dijit/layout/BorderContainer"style=" width:100%; left: 5px; height:95%; border-style: solid; border-width: thin; margin: 10px; padding:5px">
+                <div ng-controller="BookController">
+
+            <h2>Address Book</h2>
+
+                    <h4>{{addresses.length}} contacts in your address book</h4>
+
+
+            <hr />
+            <br>
+                <label>Search</label>
+                <input type="text" ng-model="search"></p>
+                <button ng-click="getAddress(address)">Search</button>
+            <br>
+            <br>
+            <hr />
+            <ul ng-repeat="address in addresses | filter:search">
+              <li>
+                <a ng-click="getAddress(address)">{{address.name}}</a></li>
+                </ul>
+                    <br>
+                    <hr />
+            
+            
+            <div id="addressDetails">
+                <h2>Contact Information:</h2>
+            <strong><li>{{xaddress.name}}</li></strong>
+    		<h4>Contact: {{xaddress.name}}</h4>
+    		<h5>Address: {{xaddress.address}}</h5>
+            <h5>Phone: {{xaddress.phone}}</h5>
+    		<h7>Additional Info: {{xaddress.info}}<h7>
+            </div>
+        </div>
+        <h3 id="add_edit">{{add_edit}}</h3>
+        </div>
+
+
+
+  <h3 ng-bind="add_edit">{{add_edit}}</h3>
+  <h3 ng-bind="post_result"></h3>
+    <input type="text" placeholder="name" ng-model="address.name" required maxlength="100">
+    <input type="text" placeholder="address" ng-model="address.address" maxlength="100">
+    <input type="text" placeholder="phone" ng-model="address.phone" maxlength="100">
+    <input type="text" placeholder="info" ng-model="address.info" maxlength="100">
+    <br><button ng-click="saveLead()">Save</button></p>
+    <br><button ng-click="deleteLead()">Delete</button></p>
+  </span> 
+  </form>
+          </div>
+    </body>
+</html>

@@ -1,0 +1,16 @@
+<h1>Address Book</h1>
+<a href="/add">Add a New Contact</a> 
+<div>
+  {{#each address}}
+  		<strong><h3><a id="name" name="name" href="/detail/{{name}}">{{address.name}}</a></h3></strong>
+		<h4>Name: {{address.name}}</h4>
+		<h5>Address: {{address.address}}</h5>
+		<h6>Phone: {{address.phone}}</h5>
+		{{#if address.info}}
+		<h7>Info: {{address.info}}</h5>
+		{{/if}}
+		<hr />
+		<br>
+  {{/each}}
+</div>
+

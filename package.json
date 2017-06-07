@@ -1,0 +1,32 @@
+{
+  "name": "moorphy",
+  "version": "1.0.0",
+  "description": "test project",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "cheerio": "^0.20.0",
+    "cors": "^2.7.1",
+    "express": "^4.13.4",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^4.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seaukara/AddressBookITC230.git"
+  },
+  "keywords": [
+    "test",
+    "project"
+  ],
+  "author": "Mike Murphy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seaukara/AddressBookITC230/issues"
+  },
+  "homepage": "https://github.com/seaukara/AddressBookITC230/readme"
+}
