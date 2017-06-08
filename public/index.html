@@ -32,89 +32,121 @@
             console.log('Error: ' + response.data);
         });
 
-        $scope.hideform = true;
-        // reset form
 
 
 
             $scope.getAddress = function(item){
+                console.log($scope)
+                
+              
                 if (!item) {
                     $scope.addAddress = true;
-                    $scope.add_edit = "Add New: ";
+                    $scope.xaddress = null;
                     console.log("undefined", undefined)
                 } else {
+                    
+                    
                     $scope.add = false;
                     $scope.hideform = (item == $scope.address) ? !$scope.hideform : false; 
                     console.log("get", item)
-                    return $scope.xaddress = item;
+                    $scope.xaddress = item;
+                    document.getElementById("addButton").disabled = true;
+                    document.getElementById("deleteButton").disabled = false;
+                    document.getElementById("addButton").style.color="lightgrey";
+                    document.getElementById("deleteButton").style.color="black";
+                    document.getElementById("inputAddress").setAttribute("placeholder", $scope.xaddress.address)
+                    document.getElementById("phone").setAttribute("placeholder", $scope.xaddress.phone)
+                    document.getElementById("info").setAttribute("placeholder", $scope.xaddress.info)
+                    document.getElementById("name").setAttribute("placeholder", $scope.xaddress.name)
+                    return $scope.xaddress
                 }
             };
 
-            $scope.addAdress = function() { 
+            $scope.addAddress = function(item) { 
+                console.log(item, $scope)
                 $scope.add = true;
                 $scope.hideform = false; 
-                $scope.address = {};
+                $scope.xaddress = {};
               };
-            $scope.saveLead = function() { 
-                $http.post('/api/add', $scope.lead)
+            $scope.saveAddress = function(item) { 
+                console.log("address", item)
+                $http.post('/api/add', $scope.address)
                 .then(function successCallback(response) {
                     $scope.post_result = response.data.result;
                 }, function errorCallback(response) {
                   console.log('Error: ' + response.data);
                 });
+                location.reload()
               };
+
+            $scope.deleteAddress = function(item) { 
+                document.getElementById("addButton").disabled = false;
+                document.getElementById("deleteButton").disabled = true;
+                document.getElementById("addButton").style.color="black";
+                document.getElementById("deleteButton").style.color="lightgrey";
+                console.log("address", item)
+                $http.post('/api/remove', item)
+                .then(function successCallback(response) {
+                    $scope.post_result = response.data.result;
+                }, function errorCallback(response) {
+                  console.log('Error: ' + response.data);
+                });
+                location.reload()
+
+              };
+            $scope.reset = function() {
+                $scope.xaddress = null;
+                document.getElementById("addButton").disabled = false;
+                document.getElementById("deleteButton").disabled = true;
+                document.getElementById("addButton").style.color="black";
+                document.getElementById("deleteButton").style.color="lightgrey";
+                document.getElementById("inputAddress").setAttribute("placeholder", $scope.xaddress.address);
+                document.getElementById("phone").setAttribute("placeholder", $scope.xaddress.phone);
+                document.getElementById("info").setAttribute("placeholder", $scope.xaddress.info);
+                document.getElementById("name").setAttribute("placeholder", $scope.xaddress.name);
+
+            }
+
                 
         });
-        </script>
-            <body ng-app="addressApp">
-                <div data-dojo-type="dijit/layout/BorderContainer"style=" width:100%; left: 5px; height:95%; border-style: solid; border-width: thin; margin: 10px; padding:5px">
-                <div ng-controller="BookController">
-
-            <h2>Address Book</h2>
-
-                    <h4>{{addresses.length}} contacts in your address book</h4>
-
-
-            <hr />
-            <br>
+    </script>
+    <body ng-app="addressApp">
+        <div data-dojo-type="dijit/layout/BorderContainer" class="border">
+            <div ng-controller="BookController">
+                <h2>Address Book</h2>
+                <h4>{{addresses.length}} contacts in your address book</h4>
+                <hr />
+                <br>
                 <label>Search</label>
-                <input type="text" ng-model="search"></p>
-                <button ng-click="getAddress(address)">Search</button>
-            <br>
-            <br>
-            <hr />
-            <ul ng-repeat="address in addresses | filter:search">
-              <li>
+                <input type="text" ng-model="address.name"></p>
+
+                <hr />
+                <ul ng-repeat="address in addresses | filter:address.name">
                 <a ng-click="getAddress(address)">{{address.name}}</a></li>
                 </ul>
-                    <br>
-                    <hr />
-            
-            
-            <div id="addressDetails">
-                <h2>Contact Information:</h2>
-            <strong><li>{{xaddress.name}}</li></strong>
-    		<h4>Contact: {{xaddress.name}}</h4>
-    		<h5>Address: {{xaddress.address}}</h5>
-            <h5>Phone: {{xaddress.phone}}</h5>
-    		<h7>Additional Info: {{xaddress.info}}<h7>
+                <br>
+                <hr />
+                <div id="addressDetails" style="width: 98%; padding:5px; margin: 3px;">
+                    <strong><li>{{xaddress.name}}</li></strong>
+                    <h4>Name: {{xaddress.name}}</h4>
+            		<h5>Address: {{xaddress.address}}</h5>
+                    <h5>Phone: {{xaddress.phone}}</h5>
+            		<h7>Additional Info: {{xaddress.info}}</h7>
+                </div>
+                <br>
+                <div style="margin:3px">
+                    <div style="border-style: solid; border-width: thin; padding: 3px;">
+                        <input id="name" type="text" placeholder="name" ng-model="address.name" required maxlength="100"><br>
+                        <input id="inputAddress" type="text" placeholder="address" ng-model="address.address" maxlength="100"><br>
+                        <input id="phone" type="text" placeholder="phone" ng-model="address.phone" maxlength="100"><br>
+                        <input id="info" type="text" placeholder="info" ng-model="address.info" maxlength="100">
+                    </div>
+                    <br>                
+                    <button id="addButton" ng-click="saveAddress(xaddress)" style="color: black;">Add</button>
+                    <button id="deleteButton" ng-click="deleteAddress(xaddress)" style="color: lightgrey;" disabled="true">Delete</button>
+                    <button id="resetButton" ng-click="reset()" style="color: black;">Reset</button>
+                </div>
             </div>
         </div>
-        <h3 id="add_edit">{{add_edit}}</h3>
-        </div>
-
-
-
-  <h3 ng-bind="add_edit">{{add_edit}}</h3>
-  <h3 ng-bind="post_result"></h3>
-    <input type="text" placeholder="name" ng-model="address.name" required maxlength="100">
-    <input type="text" placeholder="address" ng-model="address.address" maxlength="100">
-    <input type="text" placeholder="phone" ng-model="address.phone" maxlength="100">
-    <input type="text" placeholder="info" ng-model="address.info" maxlength="100">
-    <br><button ng-click="saveLead()">Save</button></p>
-    <br><button ng-click="deleteLead()">Delete</button></p>
-  </span> 
-  </form>
-          </div>
     </body>
 </html>

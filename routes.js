@@ -76,7 +76,7 @@ module.exports = function(app){
 });
 
 
-    app.post('/add', function(req,res){
+    app.get('/add/:address', function(req,res){
         console.log("add")
         res.type('text/html');
         var newAddress = {"name":req.body.name.toLowerCase(), "address":req.body.address, "phone":req.body.phone, "info":req.body.info};
@@ -142,23 +142,67 @@ app.get('/api/address/:addressName', function(req,res){
 });
 
  
+// app.post('/api/add', function(req,res){
+//         console.log("add")
+//         res.type('text/html');
+//         var newAddress = {"name":req.body.name.toLowerCase(), "address":req.body.address, "phone":req.body.phone, "info":req.body.info};
+//         console.log(addressID)
+//         new Address(newAddress).save();
+//         // Address.update({"id":addressID}, newAddress, function(err, x){
+//         //     console.log("insideupdate")
+//         //     console.log(x)
+//         //     var action = (x) ? "updated": "added";
+//         //     //res.render('detail', {address: newAddress,pageTitle, result:{action:action}});
+//         // });
+
+//         Address.find(function (err, address){
+//         console.log(address)
+//         if (err) return next(err);
+
+       
+//     });
+// });
+
 app.post('/api/add', function(req,res){
         console.log("add")
         res.type('text/html');
-        var newAddress = {"name":req.body.name.toLowerCase(), "address":req.body.address, "phone":req.body.phone, "info":req.body.info};
+        var newAddress = {"name":req.body.name, "address":req.body.address, "phone":req.body.phone, "info":req.body.info};
+        console.log(newAddress)
         var addressID = (req.body.id) ? req.body.id : "";
-        console.log(addressID)
-        Address.update({"id":addressID}, newAddress, function(err, x){
-            console.log(x)
-            var action = (x) ? "updated": "added";
-            //res.render('detail', {address: newAddress,pageTitle, result:{action:action}});
-        });
+        console.log("addressID", addressID)
+        new Address(newAddress).save();
+        // Address.update({"id":addressID}, newAddress, function(err, x){
+        //     console.log("insideupdate")
+        //     console.log(x)
+        //     var action = (x) ? "updated": "added";
+        //     //res.render('detail', {address: newAddress,pageTitle, result:{action:action}});
+        // });
 
         Address.find(function (err, address){
         console.log(address)
         if (err) return next(err);
 
        
+    });
+});
+
+app.post('/api/remove', function(req,res){
+        console.log("remove")
+        res.type('text/html');
+        var addressDelete = {"_id":req.body._id, "name":req.body.name, "address":req.body.address, "phone":req.body.phone, "info":req.body.info};
+        console.log(addressDelete)
+        console.log(req.body._id);
+        Address.remove(addressDelete, function(err){
+            //log the error
+            console.log(err);
+            var action = (err) ? err: "deleted";
+            //res.type('text/html'); 
+            //res.render('detail', {result: action});
+        });
+
+        Address.find(function (err, address){
+        console.log(address)
+        if (err) return next(err);
     });
 });
 

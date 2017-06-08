@@ -14,6 +14,16 @@ footer, header, nav, section {
 	margin:20px auto; 
 }
 
+.border {
+    width:90%; 
+    left: 5px; 
+    height:95%; 
+    border-style: solid;
+    border-width: thin; 
+    margin: 10px; 
+    padding:5px
+}
+
 hr  {
 	color:black;
 	margin:0 15px 0 15px;
@@ -35,7 +45,9 @@ nav ul li  {
 	font-size:20px;
 	line-height:16px;
 }
-
+input {
+    width:100%;
+}
 footer  {
     width:80%;
     margin:20px auto;
