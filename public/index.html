@@ -43,17 +43,20 @@
                     $scope.addAddress = true;
                     $scope.xaddress = null;
                     console.log("undefined", undefined)
-                } else {
-                    
-                    
+                } else {             
                     $scope.add = false;
                     $scope.hideform = (item == $scope.address) ? !$scope.hideform : false; 
                     console.log("get", item)
                     $scope.xaddress = item;
+                    try {
+                        $scope.id = item._id
+                    } catch (err) {console.log("no id -ea")};
                     document.getElementById("addButton").disabled = true;
                     document.getElementById("deleteButton").disabled = false;
+                    document.getElementById("updateButton").disabled = false;
                     document.getElementById("addButton").style.color="lightgrey";
                     document.getElementById("deleteButton").style.color="black";
+                    document.getElementById("updateButton").style.color="black";
                     document.getElementById("inputAddress").setAttribute("placeholder", $scope.xaddress.address)
                     document.getElementById("phone").setAttribute("placeholder", $scope.xaddress.phone)
                     document.getElementById("info").setAttribute("placeholder", $scope.xaddress.info)
@@ -62,21 +65,31 @@
                 }
             };
 
-            $scope.addAddress = function(item) { 
-                console.log(item, $scope)
-                $scope.add = true;
-                $scope.hideform = false; 
-                $scope.xaddress = {};
+            $scope.addAddress = function(item) {
+
+                    console.log(item, $scope)
+                    $scope.add = true;
+                    $scope.hideform = false; 
+                    $scope.xaddress = {};
+                
               };
             $scope.saveAddress = function(item) { 
-                console.log("address", item)
-                $http.post('/api/add', $scope.address)
-                .then(function successCallback(response) {
-                    $scope.post_result = response.data.result;
-                }, function errorCallback(response) {
-                  console.log('Error: ' + response.data);
-                });
-                location.reload()
+                try {
+                    if ($scope.address.name == null) {
+                        confirm("Must enter a name to add a new record")
+                    } else {
+                        console.log("address", item)
+                        $http.post('/api/add', $scope.address)
+                        .then(function successCallback(response) {
+                            $scope.post_result = response.data.result;
+                        }, function errorCallback(response) {
+                          console.log('Error: ' + response.data);
+                        });
+                        location.reload()
+                    }
+                } catch (err) {
+                    confirm("NAME can not be null - must enter name before adding new address.")
+                }
               };
 
             $scope.deleteAddress = function(item) { 
@@ -104,6 +117,32 @@
                 document.getElementById("phone").setAttribute("placeholder", $scope.xaddress.phone);
                 document.getElementById("info").setAttribute("placeholder", $scope.xaddress.info);
                 document.getElementById("name").setAttribute("placeholder", $scope.xaddress.name);
+            }
+
+            $scope.update = function(item) {
+                console.log(item, $scope.id, $scope.xaddress);
+                var r;
+                item._id = $scope.id;
+                if (item.name == null) item.name = $scope.xaddress.name;
+                if (item.address == null) item.address = $scope.xaddress.address;
+                if (item.phone == null) item.phone = $scope.xaddress.phone;
+                if (item.info == null) item.info = $scope.xaddress.info;
+                console.log(item)
+                document.getElementById("addButton").disabled = false;
+                document.getElementById("deleteButton").disabled = true;
+                document.getElementById("updateButton").disabled = true;
+                document.getElementById("addButton").style.color="black";
+                document.getElementById("updateButton").style.color="lightgrey";
+                document.getElementById("deleteButton").style.color="lightgrey";
+
+                $http.post('/api/update', item)
+                .then(function successCallback(response) {
+                    $scope.post_result = response.data.result;
+                }, function errorCallback(response) {
+                  console.log('Error: ' + response.data);
+                });
+                location.reload()
+
 
             }
 
@@ -144,6 +183,7 @@
                     <br>                
                     <button id="addButton" ng-click="saveAddress(xaddress)" style="color: black;">Add</button>
                     <button id="deleteButton" ng-click="deleteAddress(xaddress)" style="color: lightgrey;" disabled="true">Delete</button>
+                    <button id="updateButton" ng-click="update(address)" style="color: lightgrey;" disabled="true">Update</button>
                     <button id="resetButton" ng-click="reset()" style="color: black;">Reset</button>
                 </div>
             </div>

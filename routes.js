@@ -96,6 +96,25 @@ module.exports = function(app){
     });
 });
 
+    app.get('/update/:address', function(req,res){
+        console.log("update")
+        res.type('text/html');
+        var newAddress = {"name":req.body.name, "address":req.body.address, "phone":req.body.phone, "info":req.body.info};
+        var addressID = (req.body._id) ? req.body._id : "";
+        console.log(addressID)
+        Address.update({"id":addressID}, newAddress, function(err, x){
+            console.log(x)
+            var action = (x) ? "updated": "added";
+            res.render('detail', {address: newAddress,pageTitle, result:{action:action}});
+        });
+
+        Address.find(function (err, address){
+        console.log(address)
+        if (err) return next(err);
+
+       
+    });
+});
 
     app.post('/remove', function(req,res){
 
@@ -205,6 +224,27 @@ app.post('/api/remove', function(req,res){
         if (err) return next(err);
     });
 });
+
+app.post('/api/update', function(req,res){
+        console.log(req.body)
+        var updateID = {"_id":req.body._id},
+        updateAddress = {"name":req.body.name, "address":req.body.address, "phone":req.body.phone, "info":req.body.info};
+        console.log(updateID, updateAddress)
+
+        var addressID = (req.body._id) ? req.body._id : "";
+        console.log(addressID)
+        Address.update({"_id":addressID}, updateAddress, function(err, x){
+            console.log(x)
+            var action = (x) ? "updated": "added";
+        });
+
+        Address.find(function (err, address){
+        console.log(address)
+        if (err) return next(err);
+        if (err) {return next(err)} else {return address};
+    });
+});
+
 
 
     // 404 Catch-All Handler
