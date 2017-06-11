@@ -113,10 +113,10 @@
                 document.getElementById("deleteButton").disabled = true;
                 document.getElementById("addButton").style.color="black";
                 document.getElementById("deleteButton").style.color="lightgrey";
-                document.getElementById("inputAddress").setAttribute("placeholder", $scope.xaddress.address);
-                document.getElementById("phone").setAttribute("placeholder", $scope.xaddress.phone);
-                document.getElementById("info").setAttribute("placeholder", $scope.xaddress.info);
-                document.getElementById("name").setAttribute("placeholder", $scope.xaddress.name);
+                document.getElementById("inputAddress").setAttribute("placeholder", "address");
+                document.getElementById("phone").setAttribute("placeholder", "phone");
+                document.getElementById("info").setAttribute("placeholder", "additional info");
+                document.getElementById("name").setAttribute("placeholder", "name");
             }
 
             $scope.update = function(item) {
