@@ -7,15 +7,15 @@ var addressDB = require('./models/addressDB.js');
 
 
 new addressDB({
-    name: "Kara Manseau",
-    address: "1511 E Mercer St, Seattle",
+    name: "Kara M",
+    address: "1511 SE Grover St, Seattle",
     phone: "503-455-3333",
     info: "home"
 }).save();
 
 new addressDB({
-    name: "Mary Manseau",
-    address: "5230 NW 137th Ave",
+    name: "Sally May",
+    address: "5230 NW Apple Ave",
     phone: "503-455-3333",
     info: "mom"
 }).save();
