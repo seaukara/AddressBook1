@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var credentials = require('../lib/credentials.js');
 
 var options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 }  } };
-//"mongodb://seaukara:evenFly1108!@ds137291.mlab.com:37291/kara"
+
 console.log(credentials)
 mongoose.connect(credentials.mongo.development.connectionString, options);
 
